@@ -52,11 +52,18 @@
         button:hover {
             background-color: #0056b3;
         }
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Generate HTML Resume from LinkedIn PDF</h1>
+        {% if error_message %}
+        <div class="error-message">{{ error_message }}</div>
+        {% endif %}
         <form id="upload-form" action="/generate_resume/" method="post" enctype="multipart/form-data">
             <label for="file">Choose PDF file:</label>
             <input type="file" id="file" name="file" accept="application/pdf" required>
