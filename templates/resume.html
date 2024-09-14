@@ -61,7 +61,13 @@
             <h2>Personal Information</h2>
             <p>Name: {{ resume_data.name }}</p>
             <p>Email: {{ resume_data.email }}</p>
-            <p>Contact: {{ resume_data.contact }}</p>
+            <p>Contact: 
+                {% if resume_data.contact.linkedin %}
+                    <a href="{{ resume_data.contact.linkedin }}" target="_blank">LinkedIn Profile</a>
+                {% else %}
+                    {{ resume_data.contact }}
+                {% endif %}
+            </p>
             <hr>
         </div>
 
