@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Resume</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section hr {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .section ul {
+            padding-left: 20px;
+        }
+        .section ul ul {
+            padding-left: 20px;
+        }
+        .section h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .section p, .section li {
+            color: #555;
+        }
+        .section li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Resume</h1>
+
+        <div class="section">
+            <h2>Personal Information</h2>
+            <p>Name: {{ resume_data.name }}</p>
+            <p>Email: {{ resume_data.email }}</p>
+            <p>Contact: {{ resume_data.contact }}</p>
+            <hr>
+        </div>
+
+        <div class="section">
+            <h2>Summary</h2>
+            <p>{{ resume_data.summary }}</p>
+            <hr>
+        </div>
+
+        <div class="section">
+            <h2>Top Skills</h2>
+            <ul>
+                {% for skill in resume_data.top_skills %}
+                <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+            <hr>
+        </div>
+
+        <div class="section">
+            <h2>Certifications</h2>
+            <ul>
+                {% for certification in resume_data.certifications %}
+                <li>{{ certification }}</li>
+                {% endfor %}
+            </ul>
+            <hr>
+        </div>
+
+        <div class="section">
+            <h2>Honors and Awards</h2>
+            <ul>
+                {% for award in resume_data.honors_awards %}
+                <li>{{ award }}</li>
+                {% endfor %}
+            </ul>
+            <hr>
+        </div>
+
+        <div class="section">
+            <h2>Experience</h2>
+            <ul>
+                {% for job in resume_data.experience %}
+                <li>
+                    <strong>{{ job.position }}</strong> at {{ job.company }} ({{ job.duration }})
+                    <p>{{ job.location }}</p>
+                    <ul>
+                        {% for responsibility in job.responsibilities %}
+                        <li>{{ responsibility }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+            <hr>
+        </div>
+
+        <div class="section">
+            <h2>Education</h2>
+            <ul>
+                {% for education in resume_data.education %}
+                <li>
+                    <strong>{{ education.degree }}</strong> from {{ education.institution }} ({{ education.duration }})
+                </li>
+                {% endfor %}
+            </ul>
+            <hr>
+        </div>
+    </div>
+</body>
+</html>
