@@ -4,6 +4,7 @@ from fastapi.responses import HTMLResponse
 import openai
 import PyPDF2
 import io
+import logging
 from dotenv import load_dotenv
 import os
 import re
@@ -17,6 +18,10 @@ load_dotenv()
 
 
 templates = Jinja2Templates(directory="templates")
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Function to extract text from PDF
 def extract_text_from_pdf(pdf_bytes):
@@ -62,14 +67,22 @@ async def upload_page(request: Request):
 # Route to handle PDF upload and resume generation
 @app.post("/generate_resume/", response_class=HTMLResponse)
 async def generate_resume(request: Request, file: UploadFile = File(...),api_key: str = Form(...)):
-    contents = await file.read()
-    extracted_text = extract_text_from_pdf(contents)
-    
-    # Generate structured resume data
-    resume_data = generate_resume_data(extracted_text,api_key)
-    if resume_data is None:
-        return HTMLResponse(content="Error generating resume data", status_code=500)
-    print(resume_data)
-    
-    # Render the resume in HTML using Jinja2 template
-    return templates.TemplateResponse("resume.html", {"request": request, "resume_data": resume_data})
+    logger.info("Received request to generate resume")
+    try:
+        contents = await file.read()
+        logger.info("PDF file read successfully")
+        extracted_text = extract_text_from_pdf(contents)
+        logger.info("Extracted text from PDF")
+        
+        # Generate structured resume data
+        resume_data = generate_resume_data(extracted_text, api_key)
+        if resume_data is None:
+            logger.error("Error generating resume data")
+            return HTMLResponse(content="Error generating resume data", status_code=500)
+        logger.info("Resume data generated successfully")
+        
+        # Render the resume in HTML using Jinja2 template
+        return templates.TemplateResponse("resume.html", {"request": request, "resume_data": resume_data})
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
+        return HTMLResponse(content="An internal error occurred", status_code=500)
